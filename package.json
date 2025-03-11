@@ -2,6 +2,7 @@
   "name": "smart-ship-management-system",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://zt15864126114.github.io/smart-ship-management-system",
   
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
