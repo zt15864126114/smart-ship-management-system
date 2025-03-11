@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
   Card, 
   List, 
@@ -12,12 +12,10 @@ import {
   Form,
   Select,
   message,
-  Divider,
   Modal,
   Row,
   Col,
   Tag,
-  Tooltip,
   Statistic
 } from 'antd';
 import { 
@@ -27,23 +25,15 @@ import {
   MessageOutlined,
   PhoneOutlined,
   VideoCameraOutlined,
-  FileOutlined,
-  PictureOutlined,
   AudioOutlined,
   BellOutlined,
-  CheckCircleOutlined,
-  SyncOutlined,
   WifiOutlined,
   DisconnectOutlined,
-  SettingOutlined,
-  InfoCircleOutlined
 } from '@ant-design/icons';
 import { messages, contacts, notifications, communicationSystems } from '../mock/data';
 
-const { Title, Text, Paragraph } = Typography;
-const { TextArea } = Input;
+const { Title, Text } = Typography;
 const { TabPane } = Tabs;
-const { Option } = Select;
 
 const CommunicationSystem = () => {
   const [messageList, setMessageList] = useState(messages);

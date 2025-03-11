@@ -15,27 +15,19 @@ import {
   Statistic,
   Alert,
   Tabs,
-  List,
-  Tag,
   Descriptions,
-  Timeline,
   notification
 } from 'antd';
 import { 
   ExclamationCircleOutlined, 
-  CheckCircleOutlined, 
-  SyncOutlined, 
+  CheckCircleOutlined,
   ClockCircleOutlined,
-  WarningOutlined,
   BellOutlined,
-  ThunderboltOutlined,
-  SettingOutlined
 } from '@ant-design/icons';
 import ReactECharts from 'echarts-for-react';
-import { alerts, ships, statistics } from '../mock/data';
+import { alerts, ships} from '../mock/data';
 
-const { Title, Text, Paragraph } = Typography;
-const { Option } = Select;
+const { Title } = Typography;
 const { TabPane } = Tabs;
 const { TextArea } = Input;
 

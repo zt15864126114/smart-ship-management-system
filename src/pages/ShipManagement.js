@@ -19,10 +19,7 @@ import {
 } from 'antd';
 import { 
   PlusOutlined, 
-  EditOutlined, 
-  DeleteOutlined, 
   SearchOutlined,
-  InfoCircleOutlined,
   HistoryOutlined,
   ToolOutlined,
   TeamOutlined
@@ -89,7 +86,35 @@ const ShipManagement = () => {
       title: '船长',
       dataIndex: 'captain',
       key: 'captain',
-    }
+    },
+    {
+      title: '操作',
+      key: 'action',
+      render: (_, record) => (
+        <Space size="middle">
+          <Button 
+            type="primary" 
+            size="small"
+            onClick={() => handleView(record)}
+          >
+            查看
+          </Button>
+          <Button 
+            size="small"
+            onClick={() => handleEdit(record)}
+          >
+            编辑
+          </Button>
+          <Button 
+            danger 
+            size="small"
+            onClick={() => handleDelete(record)}
+          >
+            删除
+          </Button>
+        </Space>
+      ),
+    },
   ];
 
   // 处理查看船舶详情

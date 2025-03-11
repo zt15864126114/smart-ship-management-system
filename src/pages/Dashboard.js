@@ -4,8 +4,7 @@ import {
   Row, 
   Col, 
   Statistic, 
-  Typography, 
-  Table, 
+  Typography,
   Badge, 
   Space, 
   Button,
@@ -17,8 +16,7 @@ import {
 } from 'antd';
 import { 
   ArrowUpOutlined, 
-  ArrowDownOutlined, 
-  ShipOutlined as ShipIcon, 
+  ArrowDownOutlined,
   EnvironmentOutlined,
   AlertOutlined,
   CheckCircleOutlined,
@@ -34,9 +32,7 @@ const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 
 const Dashboard = () => {
-  const [timeRange, setTimeRange] = useState('month');
-  
-  // 统计数据
+// 统计数据
   const statistics = {
     shipCount: ships.length,
     shipIncrease: 5.2,

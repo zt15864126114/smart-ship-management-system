@@ -25,8 +25,6 @@ import { visualizationData } from '../mock/data';
 const { Title, Text } = Typography;
 const { TabPane } = Tabs;
 const { Option } = Select;
-const { RangePicker } = DatePicker;
-
 const DataVisualization = () => {
   const [timeRange, setTimeRange] = useState('day');
   

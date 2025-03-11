@@ -30,7 +30,7 @@ import {
 import ReactECharts from 'echarts-for-react';
 import { ports } from '../mock/data';
 
-const { Title, Text } = Typography;
+const { Title} = Typography;
 const { TabPane } = Tabs;
 
 const PortManagement = () => {

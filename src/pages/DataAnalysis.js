@@ -11,7 +11,6 @@ import {
   Space, 
   Table,
   Tooltip,
-  Radio,
   Divider,
   List,
   Tag,
@@ -20,7 +19,6 @@ import {
 import { 
   AreaChartOutlined, 
   BarChartOutlined, 
-  LineChartOutlined, 
   PieChartOutlined,
   ReloadOutlined,
   DownloadOutlined,
@@ -35,12 +33,9 @@ import { analysisData, ships, ports } from '../mock/data';
 const { Title, Text, Paragraph } = Typography;
 const { TabPane } = Tabs;
 const { Option } = Select;
-const { RangePicker } = DatePicker;
-
 const DataAnalysis = () => {
-  const [timeRange, setTimeRange] = useState('month');
-  const [portSelection, setPortSelection] = useState(['all']);
-  const [chartType, setChartType] = useState('line');
+  const [setTimeRange] = useState('month');
+  const [setPortSelection] = useState(['all']);
   const [dataRefreshTime, setDataRefreshTime] = useState(new Date().toLocaleString());
   
   // 处理刷新数据
