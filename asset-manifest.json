@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/smart-ship-management-system/static/css/main.cf893993.css",
-    "main.js": "/smart-ship-management-system/static/js/main.586efc59.js",
-    "index.html": "/smart-ship-management-system/index.html",
-    "main.cf893993.css.map": "/smart-ship-management-system/static/css/main.cf893993.css.map",
-    "main.586efc59.js.map": "/smart-ship-management-system/static/js/main.586efc59.js.map"
+    "main.css": "/static/css/main.cf893993.css",
+    "main.js": "/static/js/main.479742ba.js",
+    "index.html": "/index.html",
+    "main.cf893993.css.map": "/static/css/main.cf893993.css.map",
+    "main.479742ba.js.map": "/static/js/main.479742ba.js.map"
   },
   "entrypoints": [
     "static/css/main.cf893993.css",
-    "static/js/main.586efc59.js"
+    "static/js/main.479742ba.js"
   ]
 }
