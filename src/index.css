@@ -1,0 +1,110 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.site-layout-content {
+  min-height: 280px;
+  padding: 24px;
+  background: #fff;
+}
+
+.logo {
+  height: 32px;
+  margin: 16px;
+  background: rgba(255, 255, 255, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.ant-layout {
+  min-height: 100vh;
+}
+
+.ant-layout-sider {
+  box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+  z-index: 10;
+}
+
+.site-layout-background {
+  background: #fff;
+}
+
+.header-title {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+  margin-left: 15px;
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 500px;
+}
+
+.dashboard-card {
+  margin-bottom: 24px;
+}
+
+.dashboard-card .ant-card-head {
+  background-color: #f0f2f5;
+}
+
+.stat-card {
+  text-align: center;
+}
+
+.stat-card .ant-statistic-title {
+  font-size: 16px;
+}
+
+.warning-list {
+  height: 300px;
+  overflow-y: auto;
+}
+
+.ship-table {
+  margin-top: 16px;
+}
+
+.emergency-button {
+  margin-right: 8px;
+}
+
+.communication-status {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.status-indicator {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 8px;
+}
+
+.status-active {
+  background-color: #52c41a;
+}
+
+.status-inactive {
+  background-color: #ff4d4f;
+}
+
+.status-warning {
+  background-color: #faad14;
+} 
