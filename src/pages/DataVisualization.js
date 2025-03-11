@@ -8,8 +8,7 @@ import {
   Button, 
   Row, 
   Col,
-  Statistic,
-  DatePicker
+  Statistic
 } from 'antd';
 import { 
   DownloadOutlined, 

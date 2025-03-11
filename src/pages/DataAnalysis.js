@@ -7,8 +7,7 @@ import {
   Tabs, 
   Select, 
   Button, 
-  DatePicker, 
-  Space, 
+  Space,
   Table,
   Tooltip,
   Divider,
@@ -28,7 +27,7 @@ import {
   ArrowDownOutlined
 } from '@ant-design/icons';
 import ReactECharts from 'echarts-for-react';
-import { analysisData, ships, ports } from '../mock/data';
+import { analysisData, ports } from '../mock/data';
 
 const { Title, Text, Paragraph } = Typography;
 const { TabPane } = Tabs;
