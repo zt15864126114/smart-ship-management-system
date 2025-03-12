@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "https://zt15864126114.github.io/smart-ship-management-system/static/css/main.cf893993.css",
-    "main.js": "https://zt15864126114.github.io/smart-ship-management-system/static/js/main.447ee6c6.js",
+    "main.js": "https://zt15864126114.github.io/smart-ship-management-system/static/js/main.fe7bee9a.js",
     "index.html": "https://zt15864126114.github.io/smart-ship-management-system/index.html",
     "main.cf893993.css.map": "https://zt15864126114.github.io/smart-ship-management-system/static/css/main.cf893993.css.map",
-    "main.447ee6c6.js.map": "https://zt15864126114.github.io/smart-ship-management-system/static/js/main.447ee6c6.js.map"
+    "main.fe7bee9a.js.map": "https://zt15864126114.github.io/smart-ship-management-system/static/js/main.fe7bee9a.js.map"
   },
   "entrypoints": [
     "static/css/main.cf893993.css",
-    "static/js/main.447ee6c6.js"
+    "static/js/main.fe7bee9a.js"
   ]
 }
