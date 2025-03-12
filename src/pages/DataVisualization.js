@@ -359,7 +359,7 @@ const DataVisualization = () => {
           <Card>
             <Statistic
               title="平均泊位利用率"
-              value={visualizationData.portUtilization.day.reduce((sum, item) => sum + item.berth, 0) / visualizationData.portUtilization.day.length}
+              value={(visualizationData.portUtilization.day.reduce((sum, item) => sum + item.berth, 0) / visualizationData.portUtilization.day.length).toFixed(2)}
               suffix="%"
               prefix={<PieChartOutlined />}
             />
