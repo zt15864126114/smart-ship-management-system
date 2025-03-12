@@ -7,6 +7,7 @@ import zhCN from 'antd/lib/locale/zh_CN';
 import MainLayout from './layouts/MainLayout';
 
 // Pages
+import Welcome from './pages/Welcome';
 import Dashboard from './pages/Dashboard';
 import ShipManagement from './pages/ShipManagement';
 import PortManagement from './pages/PortManagement';
@@ -22,6 +23,7 @@ import SystemSettings from './pages/SystemSettings';
 // 检查所有导入的组件是否存在
 console.log({
   MainLayout,
+  Welcome,
   Dashboard,
   ShipManagement,
   PortManagement,
@@ -40,7 +42,8 @@ function App() {
     <ConfigProvider locale={zhCN}>
       <Routes>
         <Route path="/" element={<MainLayout />}>
-          <Route index element={<Dashboard />} />
+          <Route index element={<Welcome />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="ship-management" element={<ShipManagement />} />
           <Route path="port-management" element={<PortManagement />} />
           <Route path="monitoring-system" element={<MonitoringSystem />} />

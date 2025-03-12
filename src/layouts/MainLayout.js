@@ -16,7 +16,8 @@ import {
   SettingOutlined,
   LogoutOutlined,
   MenuFoldOutlined,
-  MenuUnfoldOutlined
+  MenuUnfoldOutlined,
+  HomeOutlined
 } from '@ant-design/icons';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 
@@ -102,8 +103,11 @@ const MainLayout = () => {
           selectedKeys={[currentPath]}
           defaultOpenKeys={['sub1', 'sub2', 'sub3']}
         >
-          <Menu.Item key="/" icon={<DashboardOutlined />}>
-            <Link to="/">仪表盘</Link>
+          <Menu.Item key="/" icon={<HomeOutlined />}>
+            <Link to="/">首页</Link>
+          </Menu.Item>
+          <Menu.Item key="/dashboard" icon={<DashboardOutlined />}>
+            <Link to="/dashboard">仪表盘</Link>
           </Menu.Item>
           <Menu.Item key="/ship-management" icon={<RocketOutlined />}>
             <Link to="/ship-management">船舶管理</Link>
