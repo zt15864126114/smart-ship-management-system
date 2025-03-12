@@ -17,6 +17,7 @@ import DataVisualization from './pages/DataVisualization';
 import ReportGeneration from './pages/ReportGeneration';
 import DataAnalysis from './pages/DataAnalysis';
 import CommunicationSystem from './pages/CommunicationSystem';
+import SystemSettings from './pages/SystemSettings';
 
 // 检查所有导入的组件是否存在
 console.log({
@@ -30,7 +31,8 @@ console.log({
   DataVisualization,
   ReportGeneration,
   DataAnalysis,
-  CommunicationSystem
+  CommunicationSystem,
+  SystemSettings
 });
 
 function App() {
@@ -48,6 +50,7 @@ function App() {
           <Route path="report-generation" element={<ReportGeneration />} />
           <Route path="data-analysis" element={<DataAnalysis />} />
           <Route path="communication-system" element={<CommunicationSystem />} />
+          <Route path="system-settings" element={<SystemSettings />} />
         </Route>
       </Routes>
     </ConfigProvider>

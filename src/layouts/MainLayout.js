@@ -132,6 +132,10 @@ const MainLayout = () => {
           <Menu.Item key="/communication-system" icon={<WifiOutlined />}>
             <Link to="/communication-system">通信系统</Link>
           </Menu.Item>
+          <Menu.Divider />
+          <Menu.Item key="/system-settings" icon={<SettingOutlined />}>
+            <Link to="/system-settings">系统设置</Link>
+          </Menu.Item>
         </Menu>
       </Sider>
       <Layout style={{ marginLeft: collapsed ? 80 : 200, transition: 'all 0.2s' }}>
