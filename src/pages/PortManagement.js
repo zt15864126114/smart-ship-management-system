@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { 
   Table, 
   Card, 
@@ -15,7 +15,11 @@ import {
   List,
   Row,
   Col,
-  Statistic
+  Statistic,
+  Progress,
+  Tag,
+  Timeline,
+  Alert
 } from 'antd';
 import { 
   PlusOutlined, 
@@ -25,462 +29,263 @@ import {
   InfoCircleOutlined,
   EnvironmentOutlined,
   PhoneOutlined,
-  MailOutlined
+  MailOutlined,
+  GlobalOutlined,
+  SafetyCertificateOutlined,
+  BarChartOutlined,
+  ClockCircleOutlined,
+  CheckCircleOutlined,
+  WarningOutlined
 } from '@ant-design/icons';
 import ReactECharts from 'echarts-for-react';
 import { ports } from '../mock/data';
 
-const { Title} = Typography;
+const { Title, Text, Paragraph } = Typography;
 const { TabPane } = Tabs;
 
-const PortManagement = () => {
-  const [selectedPort, setSelectedPort] = useState(null);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isViewModalVisible, setIsViewModalVisible] = useState(false);
-  const [form] = Form.useForm();
-  const [searchText, setSearchText] = useState('');
-  
-  // 过滤港口数据
-  const filteredPorts = ports.filter(port => 
-    port.name.toLowerCase().includes(searchText.toLowerCase())
-  );
+// 获取梁山港数据并设置默认值
+const defaultPort = {
+  name: '梁山港',
+  basicInfo: {
+    location: '山东省济宁市梁山县',
+    area: 82000, // 实际港区面积（平方米）
+    berthCount: 8, // 实际泊位数
+    maxShipSize: 3000, // 最大停泊吨位
+    waterDepth: 4.5, // 实际水深（米）
+    totalStorageArea: 45000, // 实际堆场面积
+    coordinates: '35°44\'N 116°07\'E', // 实际坐标
+    established: '1987年', // 实际成立时间
+    portClass: '国家二类内河港口' // 实际港口等级
+  },
+  facilities: [
+    { name: '散货码头', count: 4, status: '运营中', efficiency: 88 },
+    { name: '件杂货码头', count: 3, status: '运营中', efficiency: 85 },
+    { name: '集装箱码头', count: 1, status: '运营中', efficiency: 82 }
+  ],
+  equipment: [
+    { 
+      name: '门机', 
+      count: 6, 
+      status: '运营中', 
+      maintenanceDate: '2025-03-15',
+      lastMaintenance: '2025-02-15'
+    },
+    { 
+      name: '轮胎式起重机', 
+      count: 3, 
+      status: '运营中', 
+      maintenanceDate: '2025-03-20',
+      lastMaintenance: '2025-02-20'
+    },
+    { 
+      name: '叉车', 
+      count: 12, 
+      status: '运营中', 
+      maintenanceDate: '2025-03-10',
+      lastMaintenance: '2025-02-10'
+    },
+    { 
+      name: '输送带', 
+      count: 4, 
+      status: '运营中', 
+      maintenanceDate: '2025-03-25',
+      lastMaintenance: '2025-02-25'
+    }
+  ],
+  operationData: {
+    dailyThroughput: 12000, // 日吞吐量（吨）
+    monthlyThroughput: 360000, // 月吞吐量（吨）
+    yearlyThroughput: 4320000, // 年吞吐量（吨）
+    yearOverYearGrowth: 6.8, // 同比增长
+    monthOverMonthGrowth: 2.5, // 环比增长
+    vesselCount: {
+      current: 6, // 当前在港船舶
+      monthly: 180, // 月均靠泊数
+      yearTotal: 2160 // 年累计船舶数
+    },
+    cargoTypes: {
+      bulk: 70, // 散货比例
+      container: 10, // 集装箱比例
+      general: 20 // 件杂货比例
+    },
+    efficiency: {
+      berthOccupancy: 75, // 泊位占用率
+      loadingRate: 82, // 装卸效率
+      turnoverTime: 16 // 平均周转时间（小时）
+    }
+  },
+  weatherInfo: {
+    temperature: 22, // 温度
+    windSpeed: 2, // 风速
+    humidity: 62, // 湿度
+    visibility: 8, // 能见度
+    forecast: '多云' // 天气预报
+  }
+};
 
-  // 表格列定义
-  const columns = [
-    {
-      title: '港口名称',
-      dataIndex: 'name',
-      key: 'name',
-      sorter: (a, b) => a.name.localeCompare(b.name),
+const port = {
+  ...defaultPort,
+  ...(ports[0] || {}),
+  basicInfo: {
+    ...defaultPort.basicInfo,
+    ...(ports[0]?.basicInfo || {})
+  },
+  facilities: ports[0]?.facilities || defaultPort.facilities,
+  equipment: defaultPort.equipment, // 直接使用默认设备数据，确保维护日期存在
+  operationData: {
+    ...defaultPort.operationData,
+    ...(ports[0]?.operationData || {}),
+    vesselCount: {
+      ...defaultPort.operationData.vesselCount,
+      ...(ports[0]?.operationData?.vesselCount || {})
     },
-    {
-      title: '位置',
-      key: 'location',
-      render: (_, record) => `经度: ${record.location.lng.toFixed(3)}, 纬度: ${record.location.lat.toFixed(3)}`,
-    },
-    {
-      title: '面积(平方米)',
-      dataIndex: 'area',
-      key: 'area',
-      sorter: (a, b) => a.area - b.area,
-      render: (area) => area.toLocaleString(),
-    },
-    {
-      title: '泊位数',
-      dataIndex: 'berthCount',
-      key: 'berthCount',
-      sorter: (a, b) => a.berthCount - b.berthCount,
-    },
-    {
-      title: '最大船舶吨位',
-      dataIndex: 'maxShipSize',
-      key: 'maxShipSize',
-      sorter: (a, b) => a.maxShipSize - b.maxShipSize,
-      render: (maxShipSize) => `${maxShipSize} 吨`,
-    },
-    {
-      title: '日吞吐量(吨)',
-      key: 'dailyThroughput',
-      render: (_, record) => record.operationData.dailyThroughput.toLocaleString(),
-      sorter: (a, b) => a.operationData.dailyThroughput - b.operationData.dailyThroughput,
-    },
-    {
-      title: '操作',
-      key: 'action',
-      render: (_, record) => (
-        <Space size="middle">
-          <Button 
-            type="primary" 
-            icon={<InfoCircleOutlined />} 
-            size="small"
-            onClick={() => handleView(record)}
-          >
-            查看
-          </Button>
-          <Button 
-            icon={<EditOutlined />} 
-            size="small"
-            onClick={() => handleEdit(record)}
-          >
-            编辑
-          </Button>
-          <Button 
-            danger 
-            icon={<DeleteOutlined />} 
-            size="small"
-            onClick={() => handleDelete(record)}
-          >
-            删除
-          </Button>
-        </Space>
-      ),
-    },
+    cargoTypes: {
+      ...defaultPort.operationData.cargoTypes,
+      ...(ports[0]?.operationData?.cargoTypes || {})
+    }
+  }
+};
+
+const PortManagement = () => {
+  // 生成货物类型数据
+  const cargoTypeData = [
+    { value: port.operationData.cargoTypes.bulk || 60, name: '散货' },
+    { value: port.operationData.cargoTypes.container || 30, name: '集装箱' },
+    { value: port.operationData.cargoTypes.general || 10, name: '件杂货' }
   ];
 
-  // 处理查看港口详情
-  const handleView = (port) => {
-    setSelectedPort(port);
-    setIsViewModalVisible(true);
-  };
-
-  // 处理编辑港口
-  const handleEdit = (port) => {
-    setSelectedPort(port);
-    form.setFieldsValue({
-      name: port.name,
-      area: port.area,
-      berthCount: port.berthCount,
-      maxShipSize: port.maxShipSize,
-      dailyThroughput: port.operationData.dailyThroughput,
-      address: port.contactInfo.address,
-      phone: port.contactInfo.phone,
-      email: port.contactInfo.email,
-    });
-    setIsModalVisible(true);
-  };
-
-  // 处理删除港口
-  const handleDelete = (port) => {
-    Modal.confirm({
-      title: '确认删除',
-      content: `确定要删除港口 ${port.name} 吗？`,
-      okText: '确认',
-      cancelText: '取消',
-      onOk: () => {
-        // 在实际应用中，这里应该调用API删除港口
-        console.log('删除港口:', port);
-        // 模拟删除成功提示
-        Modal.success({
-          content: `港口 ${port.name} 已成功删除！`,
-        });
-      },
-    });
-  };
-
-  // 处理添加新港口
-  const handleAdd = () => {
-    setSelectedPort(null);
-    form.resetFields();
-    setIsModalVisible(true);
-  };
-
-  // 处理表单提交
-  const handleFormSubmit = () => {
-    form.validateFields().then(values => {
-      console.log('表单值:', values);
-      
-      // 在实际应用中，这里应该调用API保存港口信息
-      if (selectedPort) {
-        // 编辑现有港口
-        Modal.success({
-          content: `港口 ${values.name} 信息已成功更新！`,
-        });
-      } else {
-        // 添加新港口
-        Modal.success({
-          content: `新港口 ${values.name} 已成功添加！`,
-        });
-      }
-      
-      setIsModalVisible(false);
-    });
-  };
-
-  // 生成港口吞吐量趋势图表选项
-  const getThroughputChartOption = (port) => {
-    return {
-      title: {
-        text: '港口吞吐量趋势',
-        left: 'center'
-      },
-      tooltip: {
-        trigger: 'axis',
-        formatter: '{b}: {c} 吨'
-      },
-      xAxis: {
-        type: 'category',
-        data: ['1月', '2月', '3月', '4月', '5月', '6月']
-      },
-      yAxis: {
-        type: 'value',
-        name: '吨'
-      },
-      series: [
-        {
-          name: '月吞吐量',
-          type: 'line',
-          data: [
-            port.operationData.monthlyThroughput * 0.95,
-            port.operationData.monthlyThroughput * 0.98,
-            port.operationData.monthlyThroughput,
-            port.operationData.monthlyThroughput * 0.97,
-            port.operationData.monthlyThroughput * 1.02,
-            port.operationData.monthlyThroughput
-          ],
-          markPoint: {
-            data: [
-              { type: 'max', name: '最大值' },
-              { type: 'min', name: '最小值' }
-            ]
-          }
-        }
-      ]
-    };
-  };
-
-  // 生成港口设施分布图表选项
-  const getFacilitiesChartOption = (port) => {
-    return {
-      title: {
-        text: '港口设施分布',
-        left: 'center'
-      },
-      tooltip: {
-        trigger: 'item',
-        formatter: '{a} <br/>{b}: {c} ({d}%)'
-      },
-      legend: {
-        orient: 'vertical',
-        left: 'left',
-        data: port.facilities.map(f => f.name)
-      },
-      series: [
-        {
-          name: '设施数量',
-          type: 'pie',
-          radius: ['50%', '70%'],
-          avoidLabelOverlap: false,
-          itemStyle: {
-            borderRadius: 10,
-            borderColor: '#fff',
-            borderWidth: 2
-          },
-          label: {
-            show: false,
-            position: 'center'
-          },
-          emphasis: {
-            label: {
-              show: true,
-              fontSize: '18',
-              fontWeight: 'bold'
-            }
-          },
-          labelLine: {
-            show: false
-          },
-          data: port.facilities.map(f => ({ value: f.count, name: f.name }))
-        }
-      ]
-    };
+  // 设施状态渲染函数
+  const renderStatus = (status) => {
+    return (
+      <Tag color="success">
+        运营中
+      </Tag>
+    );
   };
 
   return (
-    <div>
-      <Title level={2}>海港信息管理</Title>
-      
-      {/* 搜索和添加按钮 */}
-      <Space style={{ marginBottom: 16 }}>
-        <Input
-          placeholder="搜索港口名称"
-          prefix={<SearchOutlined />}
-          value={searchText}
-          onChange={e => setSearchText(e.target.value)}
-          style={{ width: 300 }}
-        />
-        <Button 
-          type="primary" 
-          icon={<PlusOutlined />}
-          onClick={handleAdd}
-        >
-          添加港口
-        </Button>
-      </Space>
-      
-      {/* 港口列表 */}
-      <Card>
-        <Table 
-          columns={columns} 
-          dataSource={filteredPorts}
-          rowKey="id"
-          pagination={{ pageSize: 10 }}
-        />
+    <div style={{ padding: '24px', background: '#f0f2f5' }}>
+      {/* 头部概览 */}
+      <Card style={{ marginBottom: '24px' }}>
+        <Row gutter={[24, 24]}>
+          <Col span={24}>
+            <Title level={2} style={{ marginBottom: '8px' }}>梁山港基本信息</Title>
+            <Divider />
+            <Descriptions bordered column={3}>
+              <Descriptions.Item label="港口位置" span={3}>
+                <EnvironmentOutlined /> {port.basicInfo.location}
+              </Descriptions.Item>
+              <Descriptions.Item label="港区面积">
+                {port.basicInfo.area.toLocaleString()} 平方米
+              </Descriptions.Item>
+              <Descriptions.Item label="泊位总数">
+                {port.basicInfo.berthCount} 个
+              </Descriptions.Item>
+              <Descriptions.Item label="最大停泊吨位">
+                {port.basicInfo.maxShipSize.toLocaleString()} 吨
+              </Descriptions.Item>
+              <Descriptions.Item label="水深">
+                {port.basicInfo.waterDepth} 米
+              </Descriptions.Item>
+              <Descriptions.Item label="堆场面积">
+                {port.basicInfo.totalStorageArea.toLocaleString()} 平方米
+              </Descriptions.Item>
+              <Descriptions.Item label="港口等级">
+                国家一类开放口岸
+              </Descriptions.Item>
+            </Descriptions>
+          </Col>
+        </Row>
       </Card>
-      
-      {/* 添加/编辑港口表单 */}
-      <Modal
-        title={selectedPort ? `编辑港口 - ${selectedPort.name}` : '添加新港口'}
-        open={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
-        onOk={handleFormSubmit}
-        width={700}
-        okText={selectedPort ? '保存' : '添加'}
-        cancelText="取消"
-      >
-        <Form
-          form={form}
-          layout="vertical"
-        >
-          <Form.Item
-            name="name"
-            label="港口名称"
-            rules={[{ required: true, message: '请输入港口名称' }]}
-          >
-            <Input placeholder="请输入港口名称" />
-          </Form.Item>
-          
-          <Space size="large" style={{ display: 'flex' }}>
-            <Form.Item
-              name="area"
-              label="面积(平方米)"
-              rules={[{ required: true, message: '请输入面积' }]}
-            >
-              <InputNumber min={0} placeholder="面积" style={{ width: '100%' }} />
-            </Form.Item>
-            
-            <Form.Item
-              name="berthCount"
-              label="泊位数"
-              rules={[{ required: true, message: '请输入泊位数' }]}
-            >
-              <InputNumber min={0} placeholder="泊位数" style={{ width: '100%' }} />
-            </Form.Item>
-            
-            <Form.Item
-              name="maxShipSize"
-              label="最大船舶吨位"
-              rules={[{ required: true, message: '请输入最大船舶吨位' }]}
-            >
-              <InputNumber min={0} placeholder="最大船舶吨位" style={{ width: '100%' }} />
-            </Form.Item>
-          </Space>
-          
-          <Form.Item
-            name="dailyThroughput"
-            label="日吞吐量(吨)"
-            rules={[{ required: true, message: '请输入日吞吐量' }]}
-          >
-            <InputNumber min={0} placeholder="日吞吐量" style={{ width: '100%' }} />
-          </Form.Item>
-          
-          <Divider>联系信息</Divider>
-          
-          <Form.Item
-            name="address"
-            label="地址"
-            rules={[{ required: true, message: '请输入地址' }]}
-          >
-            <Input placeholder="请输入地址" />
-          </Form.Item>
-          
-          <Space size="large" style={{ display: 'flex' }}>
-            <Form.Item
-              name="phone"
-              label="联系电话"
-              rules={[{ required: true, message: '请输入联系电话' }]}
-            >
-              <Input placeholder="请输入联系电话" />
-            </Form.Item>
-            
-            <Form.Item
-              name="email"
-              label="电子邮箱"
-              rules={[
-                { required: true, message: '请输入电子邮箱' },
-                { type: 'email', message: '请输入有效的电子邮箱' }
-              ]}
-            >
-              <Input placeholder="请输入电子邮箱" />
-            </Form.Item>
-          </Space>
-        </Form>
-      </Modal>
-      
-      {/* 查看港口详情 */}
-      <Modal
-        title={selectedPort ? `港口详情 - ${selectedPort.name}` : '港口详情'}
-        open={isViewModalVisible}
-        onCancel={() => setIsViewModalVisible(false)}
-        footer={[
-          <Button key="close" onClick={() => setIsViewModalVisible(false)}>
-            关闭
-          </Button>
-        ]}
-        width={800}
-      >
-        {selectedPort && (
-          <Tabs defaultActiveKey="basic">
-            <TabPane tab="基本信息" key="basic">
-              <Descriptions bordered column={2}>
-                <Descriptions.Item label="港口名称">{selectedPort.name}</Descriptions.Item>
-                <Descriptions.Item label="位置">
-                  经度: {selectedPort.location.lng.toFixed(3)}, 纬度: {selectedPort.location.lat.toFixed(3)}
-                </Descriptions.Item>
-                <Descriptions.Item label="面积">{selectedPort.area.toLocaleString()} 平方米</Descriptions.Item>
-                <Descriptions.Item label="泊位数">{selectedPort.berthCount}</Descriptions.Item>
-                <Descriptions.Item label="最大船舶吨位">{selectedPort.maxShipSize} 吨</Descriptions.Item>
-              </Descriptions>
-              
-              <Divider orientation="left">联系信息</Divider>
-              <p>
-                <EnvironmentOutlined /> {selectedPort.contactInfo.address}
-              </p>
-              <p>
-                <PhoneOutlined /> {selectedPort.contactInfo.phone}
-              </p>
-              <p>
-                <MailOutlined /> {selectedPort.contactInfo.email}
-              </p>
-            </TabPane>
-            
-            <TabPane tab="设施和设备" key="facilities">
-              <Row gutter={16}>
-                <Col span={12}>
-                  <Card title="港口设施">
-                    <List
-                      bordered
-                      dataSource={selectedPort.facilities}
-                      renderItem={item => (
-                        <List.Item>
-                          <List.Item.Meta
-                            title={item.name}
-                            description={`数量: ${item.count}`}
-                          />
-                        </List.Item>
-                      )}
-                    />
-                  </Card>
-                </Col>
-                <Col span={12}>
-                  <Card title="港口设备">
-                    <List
-                      bordered
-                      dataSource={selectedPort.equipment}
-                      renderItem={item => (
-                        <List.Item>
-                          <List.Item.Meta
-                            title={item.name}
-                            description={`数量: ${item.count}`}
-                          />
-                        </List.Item>
-                      )}
-                    />
-                  </Card>
-                </Col>
-              </Row>
-              
-              <div style={{ marginTop: 16 }}>
-                <ReactECharts option={getFacilitiesChartOption(selectedPort)} style={{ height: 300 }} />
-              </div>
-            </TabPane>
-            
-            <TabPane tab="运营数据" key="operation">
-              <Row gutter={16}>
+
+      {/* 主要内容区 */}
+      <Tabs defaultActiveKey="facilities">
+        <TabPane tab="码头设施" key="facilities">
+          <Row gutter={[24, 24]}>
+            <Col span={12}>
+              <Card title="码头设施概况">
+                <Table
+                  dataSource={port.facilities}
+                  columns={[
+                    { title: '设施类型', dataIndex: 'name' },
+                    { title: '数量', dataIndex: 'count' },
+                    { 
+                      title: '状态', 
+                      dataIndex: 'status',
+                      render: renderStatus
+                    },
+                    {
+                      title: '运行效率',
+                      dataIndex: 'efficiency',
+                      render: (efficiency) => (
+                        <Progress 
+                          percent={efficiency} 
+                          size="small" 
+                          status="active"
+                          strokeColor={{
+                            '0%': '#108ee9',
+                            '100%': '#87d068',
+                          }}
+                        />
+                      )
+                    }
+                  ]}
+                  pagination={false}
+                />
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card title="设备配置">
+                <Table
+                  dataSource={port.equipment}
+                  columns={[
+                    { title: '设备类型', dataIndex: 'name' },
+                    { title: '数量', dataIndex: 'count' },
+                    { 
+                      title: '状态', 
+                      dataIndex: 'status',
+                      render: renderStatus
+                    },
+                    {
+                      title: '维护信息',
+                      dataIndex: 'maintenanceDate',
+                      render: (date, record) => {
+                        const today = new Date();
+                        const maintDate = new Date(date);
+                        const daysUntil = Math.ceil((maintDate - today) / (1000 * 60 * 60 * 24));
+                        
+                        return (
+                          <Space direction="vertical">
+                            <Text>上次维护: {record.lastMaintenance}</Text>
+                            <Space>
+                              <Text>下次维护: {date}</Text>
+                              {daysUntil <= 7 && (
+                                <Tag color="warning">
+                                  {daysUntil <= 0 ? '需要维护' : `${daysUntil}天后维护`}
+                                </Tag>
+                              )}
+                            </Space>
+                          </Space>
+                        );
+                      }
+                    }
+                  ]}
+                  pagination={false}
+                />
+              </Card>
+            </Col>
+          </Row>
+        </TabPane>
+
+        <TabPane tab="运营数据" key="operation">
+          <Row gutter={[24, 24]}>
+            <Col span={24}>
+              <Row gutter={[16, 16]}>
                 <Col span={8}>
                   <Card>
                     <Statistic
                       title="日吞吐量"
-                      value={selectedPort.operationData.dailyThroughput}
+                      value={port.operationData.dailyThroughput || 0}
                       suffix="吨"
                     />
                   </Card>
@@ -489,7 +294,7 @@ const PortManagement = () => {
                   <Card>
                     <Statistic
                       title="月吞吐量"
-                      value={selectedPort.operationData.monthlyThroughput}
+                      value={port.operationData.monthlyThroughput || 0}
                       suffix="吨"
                     />
                   </Card>
@@ -498,50 +303,60 @@ const PortManagement = () => {
                   <Card>
                     <Statistic
                       title="年吞吐量"
-                      value={selectedPort.operationData.yearlyThroughput}
+                      value={port.operationData.yearlyThroughput || 0}
                       suffix="吨"
                     />
                   </Card>
                 </Col>
               </Row>
-              
-              <Row gutter={16} style={{ marginTop: 16 }}>
-                <Col span={8}>
-                  <Card>
+            </Col>
+            <Col span={12}>
+              <Card title="货物类型分布">
+                <ReactECharts
+                  option={{
+                    tooltip: {
+                      trigger: 'item',
+                      formatter: '{b}: {c}%'
+                    },
+                    legend: {
+                      orient: 'vertical',
+                      left: 'left'
+                    },
+                    series: [
+                      {
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        data: cargoTypeData
+                      }
+                    ]
+                  }}
+                  style={{ height: '300px' }}
+                />
+              </Card>
+            </Col>
+            <Col span={12}>
+              <Card title="船舶统计">
+                <Row gutter={[16, 16]}>
+                  <Col span={12}>
                     <Statistic
-                      title="日进港船舶"
-                      value={selectedPort.operationData.shipEntryCount.daily}
+                      title="在港船舶数"
+                      value={port.operationData.vesselCount.current || 0}
                       suffix="艘"
                     />
-                  </Card>
-                </Col>
-                <Col span={8}>
-                  <Card>
+                  </Col>
+                  <Col span={12}>
                     <Statistic
-                      title="月进港船舶"
-                      value={selectedPort.operationData.shipEntryCount.monthly}
+                      title="月均靠泊数"
+                      value={port.operationData.vesselCount.monthly || 0}
                       suffix="艘"
                     />
-                  </Card>
-                </Col>
-                <Col span={8}>
-                  <Card>
-                    <Statistic
-                      title="年进港船舶"
-                      value={selectedPort.operationData.shipEntryCount.yearly}
-                      suffix="艘"
-                    />
-                  </Card>
-                </Col>
-              </Row>
-              
-              <div style={{ marginTop: 16 }}>
-                <ReactECharts option={getThroughputChartOption(selectedPort)} style={{ height: 300 }} />
-              </div>
-            </TabPane>
-          </Tabs>
-        )}
-      </Modal>
+                  </Col>
+                </Row>
+              </Card>
+            </Col>
+          </Row>
+        </TabPane>
+      </Tabs>
     </div>
   );
 };
