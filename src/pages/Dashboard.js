@@ -215,11 +215,46 @@ const Dashboard = () => {
   
   // 最近任务
   const recentTasks = [
-    { id: 1, name: '济宁港货物装卸', status: '进行中', progress: 65, deadline: '2023-06-15' },
-    { id: 2, name: '微山港设备维护', status: '已完成', progress: 100, deadline: '2023-06-10' },
-    { id: 3, name: '梁山港安全检查', status: '进行中', progress: 30, deadline: '2023-06-20' },
-    { id: 4, name: '船舶年度检修计划', status: '待开始', progress: 0, deadline: '2023-06-25' },
-    { id: 5, name: '港口扩建项目评估', status: '进行中', progress: 45, deadline: '2023-06-30' }
+    { 
+      id: 1, 
+      name: '梁山港3号泊位货物装卸', 
+      status: '进行中', 
+      progress: 65, 
+      deadline: '2023-06-15',
+      description: '永泰2号散货装卸作业'
+    },
+    { 
+      id: 2, 
+      name: '梁山港起重机例行维护', 
+      status: '已完成', 
+      progress: 100, 
+      deadline: '2023-06-10',
+      description: '2号码头起重机维护保养'
+    },
+    { 
+      id: 3, 
+      name: '梁山港航道疏浚工程', 
+      status: '进行中', 
+      progress: 30, 
+      deadline: '2023-06-20',
+      description: '主航道清淤作业'
+    },
+    { 
+      id: 4, 
+      name: '梁山港码头安全巡检', 
+      status: '待开始', 
+      progress: 0, 
+      deadline: '2023-06-25',
+      description: '月度安全巡查工作'
+    },
+    { 
+      id: 5, 
+      name: '梁山港智能化改造项目', 
+      status: '进行中', 
+      progress: 45, 
+      deadline: '2023-06-30',
+      description: '港口监控系统升级'
+    }
   ];
 
   return (
@@ -404,7 +439,8 @@ const Dashboard = () => {
                     }
                     description={
                       <div>
-                        <Progress percent={task.progress} size="small" />
+                        <Text type="secondary">{task.description}</Text>
+                        <Progress percent={task.progress} size="small" style={{ margin: '8px 0' }} />
                         <Text type="secondary">截止日期: {task.deadline}</Text>
                       </div>
                     }
