@@ -598,8 +598,8 @@ export const emergencyPlans = [
       { name: '医疗队', count: 2 },
       { name: '消防设备', count: 5 }
     ],
-    lastUpdated: '2025-02-15',
-    lastDrillDate: '2025-03-01'
+    lastUpdated: '2025-03-10',
+    lastDrillDate: '2025-03-08'
   },
   {
     id: 2,
@@ -621,8 +621,8 @@ export const emergencyPlans = [
       { name: '抽水泵', count: 8 },
       { name: '救生设备', count: 20 }
     ],
-    lastUpdated: '2025-02-20',
-    lastDrillDate: '2025-03-05'
+    lastUpdated: '2025-03-11',
+    lastDrillDate: '2025-03-09'
   },
   {
     id: 3,
@@ -645,8 +645,8 @@ export const emergencyPlans = [
       { name: '灭火器', count: 50 },
       { name: '消防水带', count: 30 }
     ],
-    lastUpdated: '2023-03-05',
-    lastDrillDate: '2023-05-10'
+    lastUpdated: '2025-03-12',
+    lastDrillDate: '2025-03-10'
   },
   {
     id: 4,
@@ -669,8 +669,8 @@ export const emergencyPlans = [
       { name: '中和剂', count: 100 },
       { name: '应急泵', count: 5 }
     ],
-    lastUpdated: '2025-02-25',
-    lastDrillDate: '2025-03-08'
+    lastUpdated: '2025-03-13',
+    lastDrillDate: '2025-03-11'
   },
   {
     id: 5,
@@ -693,8 +693,8 @@ export const emergencyPlans = [
       { name: '吸油毡', count: 2000 },
       { name: '溢油分散剂', count: 500 }
     ],
-    lastUpdated: '2025-02-28',
-    lastDrillDate: '2025-03-07'
+    lastUpdated: '2025-03-13',
+    lastDrillDate: '2025-03-12'
   }
 ];
 
